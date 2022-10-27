@@ -40,14 +40,12 @@ def signup():
         
         cursor=connection.cursor()
         command="insert into member(name,account,keyword)values(%s,%s,%s);"
-        setId="ALTER TABLE member AUTO_INCREMENT = 1;"
         matchAccount="Select keyword from member where account = %s;"
         cursor.execute(matchAccount,(account,))
             
         result = cursor.fetchall()
         print(result)
-            
-        cursor.execute(setId)
+        
         cursor.execute(command,(Rname,account,keyword))
         connection.commit()
         print("更新成功")
