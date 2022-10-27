@@ -14,7 +14,7 @@ connection = mysql.connector.connect(
      host="localhost",
      database="W6member",
      user="root",
-     passwd="12345678",
+     passwd="",
      charset="utf8mb3"
 )
 
