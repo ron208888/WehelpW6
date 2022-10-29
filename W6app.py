@@ -5,7 +5,6 @@ from flask import url_for
 from flask import render_template
 from flask import session
 from flask import jsonify
-
 import re
 import mysql.connector
 from mysql.connector import Error
@@ -34,18 +33,16 @@ def signup():
     passwords = request.form["passwords"]
     cursor = connection.cursor()
     command = "insert into member(name, account, password) values(%s, %s, %s);"
-    # setId = "ALTER TABLE member AUTO_INCREMENT = 1;"
     
     try:
-        # cursor.execute(setId)
         cursor.execute(command, (Rname, account, passwords))
         connection.commit()
         print("更新成功")
-        # messagebox.showinfo("註冊成功",f"歡迎{account}加入!")
         return redirect("http://127.0.0.1:3000/")
 
     except Error as ex:
         print(ex)
+          
         if Rname == "" or account == "" or passwords == "":
             message = "請輸入完整資料"
             return redirect(url_for("error", message = message))
@@ -66,12 +63,10 @@ def signin():
     try:
         cursor.execute(matchAccount, (name,))
         result = cursor.fetchall()
-        print(result)
         
         if result[0] == passwd:
             cursor.execute(userNum, (name,))
             userId = cursor.fetchall()
-            print(userId[0][0])
             session["userID"] = userId[0][0]
             session.permanent = True
             return redirect("http://127.0.0.1:3000/member")
@@ -103,14 +98,11 @@ def member():
         message = "".join(x for x in message if x not in removeStr)
         message = message.replace(")", "\n")
         message = message.replace(",", ":")
-        print(result)
-        print(message)
         return render_template("member.html", name = name , message = message)
             
     except Error as ex:
         print(ex)
     
-
 @app.route("/error")
 def error():
     message = request.args.get("message")
@@ -131,7 +123,6 @@ def message():
     
     try:
         cursor.execute(writeMessage, (userID, name, message))
-        print(message)
         connection.commit()
         return redirect("http://127.0.0.1:3000/member")
     
